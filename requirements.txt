@@ -1,0 +1,14 @@
+# Python 3.10; Ray is required by the simulator base class.
+gymnasium==0.28.1
+numpy==1.26.4
+ray[rllib,tune]==2.20.0; sys_platform == "win32"
+ray[rllib,tune]==2.24.0; sys_platform != "win32"
+pyarrow==14.0.2
+setuptools==80.9.0
+scipy==1.13.1
+google-genai==2.24.0
+python-dotenv==1.2.3
+matplotlib==3.9.4
+pydantic==2.12.5
+pytest==8.4.2
+httpx==0.28.1

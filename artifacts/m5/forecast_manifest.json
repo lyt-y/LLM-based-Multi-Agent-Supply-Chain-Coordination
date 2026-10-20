@@ -1,0 +1,14 @@
+{
+  "forecast_method": "simple_moving_average",
+  "window": 26,
+  "forecast_horizon": 1,
+  "target": "next_period_demand",
+  "warmup_method": "expanding_mean_of_all_realized_observations_so_far",
+  "alignment": "entry t: zero-based decision t, target t+1, completed demand D[0:t] only",
+  "initial_forecast": null,
+  "source_file": "representatives.json",
+  "source_sha256": "8f03593f997046b8f52cc7547f7707486cc95be137b2d4fc138acf99363436db",
+  "artifact_file": "demand_forecasts_26.json",
+  "num_records": 120,
+  "num_decision_periods": 277
+}

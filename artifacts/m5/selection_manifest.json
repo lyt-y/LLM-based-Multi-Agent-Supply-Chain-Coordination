@@ -1,0 +1,291 @@
+{
+  "source_file": "Data/sales_train_evaluation.csv",
+  "source_sha256": "4b4a47c44c38380d2a9168216fea8c9ff2f31b1ddb772f8a0995952a038b8aa0",
+  "aggregation_rule": "Sum consecutive non-overlapping 7-day blocks d_1..d_1939; discard d_1940,d_1941",
+  "num_weeks": 277,
+  "statistics_window": "all 277 weeks; no split",
+  "positive_cv2_ddof": 1,
+  "lag1": "Pearson correlation of weeks 1..276 and 2..277, including zeros",
+  "regime_thresholds": {
+    "adi": 1.32,
+    "positive_cv2": 0.49,
+    "boundary": "low side uses <="
+  },
+  "source_records": 30490,
+  "eligible_records": 30490,
+  "excluded_records": 0,
+  "exclusion_reasons": {},
+  "classified_regime_counts": {
+    "smooth": 8725,
+    "erratic": 1144,
+    "intermittent": 17260,
+    "lumpy": 3361
+  },
+  "eligible_regime_counts": {
+    "smooth": 8725,
+    "erratic": 1144,
+    "intermittent": 17260,
+    "lumpy": 3361
+  },
+  "kmedoids": {
+    "algorithm": "deterministic alternating k-medoids",
+    "metric": "euclidean",
+    "k": 30,
+    "initialization": "nearest to componentwise median, then farthest-first",
+    "ties": "sorted ID; incumbent retained on update ties; medoids own themselves",
+    "max_iter": 300,
+    "block_size": 256,
+    "features": [
+      "log1p_mean_weekly_demand",
+      "adi",
+      "positive_cv2",
+      "lag1_autocorrelation"
+    ],
+    "scaling": "within-regime median/IQR; linear percentiles; zero IQR replaced by 1",
+    "regimes": {
+      "smooth": {
+        "converged": true,
+        "iterations": 7,
+        "objective": 4491.688519966156,
+        "objective_history": [
+          6235.861454909979,
+          4817.303438896654,
+          4625.010799288668,
+          4535.054535825194,
+          4509.693189202575,
+          4499.0395128994105,
+          4491.688519966156
+        ],
+        "feature_medians": [
+          2.1304640412830445,
+          1.1260162601626016,
+          0.28658322338031517,
+          0.46955624681503294
+        ],
+        "feature_scales": [
+          1.1336876219080991,
+          0.16168034153825617,
+          0.13591586025118949,
+          0.32131912667236
+        ]
+      },
+      "erratic": {
+        "converged": true,
+        "iterations": 5,
+        "objective": 810.8722257925779,
+        "objective_history": [
+          1074.2214799594358,
+          866.737577114585,
+          825.1101962188559,
+          818.0339836341627,
+          810.8722257925779
+        ],
+        "feature_medians": [
+          2.2328805754379966,
+          1.1687763713080168,
+          0.5947161403845307,
+          0.5933144268533423
+        ],
+        "feature_scales": [
+          1.1745670692982988,
+          0.1385668089971952,
+          0.20276332113052364,
+          0.3126224420646205
+        ]
+      },
+      "intermittent": {
+        "converged": true,
+        "iterations": 13,
+        "objective": 9905.919375416099,
+        "objective_history": [
+          17000.2758930021,
+          12171.698450175743,
+          10884.616408376984,
+          10433.767345807406,
+          10263.695002407492,
+          10171.559057775336,
+          10103.603754979458,
+          9992.548022757794,
+          9955.725682123682,
+          9921.837899917686,
+          9911.665678488138,
+          9908.896654730059,
+          9905.919375416099
+        ],
+        "feature_medians": [
+          1.0339935396834097,
+          2.0671641791044775,
+          0.30581016834413266,
+          0.5887054823378202
+        ],
+        "feature_scales": [
+          1.0169851610609575,
+          1.492476509626125,
+          0.1291659093913387,
+          0.3906266902823557
+        ]
+      },
+      "lumpy": {
+        "converged": true,
+        "iterations": 8,
+        "objective": 2534.965978218571,
+        "objective_history": [
+          3785.0602340838172,
+          3077.1452625225843,
+          2872.89102107455,
+          2713.709462391755,
+          2612.8102785850688,
+          2576.4990158146693,
+          2543.440244705464,
+          2534.965978218571
+        ],
+        "feature_medians": [
+          1.0998149346338701,
+          2.036764705882353,
+          0.6076525891529532,
+          0.5472035125014102
+        ],
+        "feature_scales": [
+          0.8347654442403958,
+          1.3680295073768443,
+          0.22034208234876895,
+          0.3192164161563646
+        ]
+      }
+    }
+  },
+  "versions": {
+    "numpy": "1.26.4",
+    "scipy": "1.15.3"
+  },
+  "selected_record_ids": {
+    "smooth": [
+      "FOODS_1_002_WI_1_evaluation",
+      "FOODS_1_154_CA_1_evaluation",
+      "FOODS_2_010_CA_3_evaluation",
+      "FOODS_2_019_TX_2_evaluation",
+      "FOODS_2_021_TX_3_evaluation",
+      "FOODS_2_060_CA_1_evaluation",
+      "FOODS_2_083_TX_2_evaluation",
+      "FOODS_2_204_CA_3_evaluation",
+      "FOODS_2_357_CA_3_evaluation",
+      "FOODS_3_050_CA_4_evaluation",
+      "FOODS_3_076_CA_1_evaluation",
+      "FOODS_3_090_CA_3_evaluation",
+      "FOODS_3_234_TX_3_evaluation",
+      "FOODS_3_367_WI_3_evaluation",
+      "FOODS_3_547_TX_2_evaluation",
+      "FOODS_3_555_CA_4_evaluation",
+      "FOODS_3_587_WI_3_evaluation",
+      "FOODS_3_656_WI_1_evaluation",
+      "FOODS_3_681_CA_1_evaluation",
+      "FOODS_3_714_CA_1_evaluation",
+      "HOBBIES_1_014_CA_3_evaluation",
+      "HOBBIES_1_201_TX_3_evaluation",
+      "HOBBIES_1_379_WI_1_evaluation",
+      "HOBBIES_1_381_TX_3_evaluation",
+      "HOBBIES_2_075_CA_3_evaluation",
+      "HOUSEHOLD_1_452_CA_2_evaluation",
+      "HOUSEHOLD_1_485_WI_3_evaluation",
+      "HOUSEHOLD_2_115_TX_1_evaluation",
+      "HOUSEHOLD_2_139_WI_1_evaluation",
+      "HOUSEHOLD_2_453_TX_1_evaluation"
+    ],
+    "erratic": [
+      "FOODS_1_019_CA_3_evaluation",
+      "FOODS_1_127_WI_1_evaluation",
+      "FOODS_1_176_CA_3_evaluation",
+      "FOODS_1_180_TX_3_evaluation",
+      "FOODS_1_206_CA_2_evaluation",
+      "FOODS_1_206_CA_3_evaluation",
+      "FOODS_1_206_TX_2_evaluation",
+      "FOODS_2_255_CA_3_evaluation",
+      "FOODS_2_255_TX_1_evaluation",
+      "FOODS_2_255_TX_2_evaluation",
+      "FOODS_2_255_WI_3_evaluation",
+      "FOODS_3_014_TX_2_evaluation",
+      "FOODS_3_069_WI_3_evaluation",
+      "FOODS_3_098_TX_3_evaluation",
+      "FOODS_3_150_CA_3_evaluation",
+      "FOODS_3_281_CA_3_evaluation",
+      "FOODS_3_313_TX_1_evaluation",
+      "FOODS_3_460_TX_3_evaluation",
+      "FOODS_3_580_WI_3_evaluation",
+      "HOBBIES_1_202_WI_2_evaluation",
+      "HOBBIES_1_277_TX_2_evaluation",
+      "HOBBIES_1_398_TX_2_evaluation",
+      "HOUSEHOLD_1_074_WI_3_evaluation",
+      "HOUSEHOLD_1_323_TX_1_evaluation",
+      "HOUSEHOLD_1_323_TX_2_evaluation",
+      "HOUSEHOLD_1_327_TX_2_evaluation",
+      "HOUSEHOLD_1_424_TX_2_evaluation",
+      "HOUSEHOLD_1_474_TX_2_evaluation",
+      "HOUSEHOLD_1_508_TX_2_evaluation",
+      "HOUSEHOLD_2_440_TX_1_evaluation"
+    ],
+    "intermittent": [
+      "FOODS_1_188_WI_1_evaluation",
+      "FOODS_2_005_CA_2_evaluation",
+      "FOODS_2_045_CA_2_evaluation",
+      "FOODS_2_057_WI_2_evaluation",
+      "FOODS_2_158_CA_2_evaluation",
+      "FOODS_2_209_TX_2_evaluation",
+      "FOODS_2_227_CA_2_evaluation",
+      "FOODS_2_301_TX_2_evaluation",
+      "FOODS_2_368_TX_2_evaluation",
+      "FOODS_2_383_WI_1_evaluation",
+      "FOODS_3_032_WI_2_evaluation",
+      "FOODS_3_123_TX_1_evaluation",
+      "FOODS_3_296_CA_4_evaluation",
+      "FOODS_3_325_WI_1_evaluation",
+      "FOODS_3_350_CA_1_evaluation",
+      "FOODS_3_595_CA_1_evaluation",
+      "FOODS_3_754_WI_1_evaluation",
+      "HOBBIES_1_052_WI_2_evaluation",
+      "HOBBIES_1_170_WI_3_evaluation",
+      "HOBBIES_1_174_TX_1_evaluation",
+      "HOBBIES_1_186_WI_3_evaluation",
+      "HOBBIES_1_399_TX_3_evaluation",
+      "HOBBIES_2_109_TX_1_evaluation",
+      "HOUSEHOLD_1_020_WI_2_evaluation",
+      "HOUSEHOLD_1_032_TX_1_evaluation",
+      "HOUSEHOLD_1_137_TX_2_evaluation",
+      "HOUSEHOLD_2_017_WI_3_evaluation",
+      "HOUSEHOLD_2_065_WI_2_evaluation",
+      "HOUSEHOLD_2_072_WI_1_evaluation",
+      "HOUSEHOLD_2_313_WI_3_evaluation"
+    ],
+    "lumpy": [
+      "FOODS_1_037_TX_2_evaluation",
+      "FOODS_1_041_TX_3_evaluation",
+      "FOODS_1_107_CA_2_evaluation",
+      "FOODS_2_192_TX_1_evaluation",
+      "FOODS_2_291_WI_3_evaluation",
+      "FOODS_3_135_WI_2_evaluation",
+      "FOODS_3_211_WI_1_evaluation",
+      "FOODS_3_213_CA_2_evaluation",
+      "FOODS_3_237_TX_2_evaluation",
+      "FOODS_3_296_CA_3_evaluation",
+      "FOODS_3_510_CA_1_evaluation",
+      "FOODS_3_514_TX_3_evaluation",
+      "FOODS_3_514_WI_3_evaluation",
+      "FOODS_3_556_CA_2_evaluation",
+      "FOODS_3_654_CA_4_evaluation",
+      "FOODS_3_665_CA_4_evaluation",
+      "FOODS_3_703_CA_3_evaluation",
+      "FOODS_3_736_WI_3_evaluation",
+      "HOBBIES_1_318_CA_3_evaluation",
+      "HOBBIES_2_015_WI_3_evaluation",
+      "HOBBIES_2_094_CA_3_evaluation",
+      "HOUSEHOLD_1_032_CA_3_evaluation",
+      "HOUSEHOLD_1_065_TX_2_evaluation",
+      "HOUSEHOLD_1_133_CA_1_evaluation",
+      "HOUSEHOLD_1_336_CA_3_evaluation",
+      "HOUSEHOLD_1_518_CA_2_evaluation",
+      "HOUSEHOLD_2_062_TX_1_evaluation",
+      "HOUSEHOLD_2_067_CA_4_evaluation",
+      "HOUSEHOLD_2_162_WI_1_evaluation",
+      "HOUSEHOLD_2_313_WI_1_evaluation"
+    ]
+  }
+}

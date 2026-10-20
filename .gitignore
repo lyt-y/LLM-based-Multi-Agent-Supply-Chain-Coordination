@@ -1,0 +1,12 @@
+.venv/
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+Data/
+/results/generated/
+/results/figures/*.png
+*.checkpoint.json
+*_run_*.json

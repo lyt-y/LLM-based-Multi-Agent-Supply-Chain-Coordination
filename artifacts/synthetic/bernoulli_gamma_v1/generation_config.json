@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "dataset_id": "bernoulli_gamma_v1",
+  "distribution": "independent Bernoulli occurrence times Gamma size",
+  "num_periods": 277,
+  "time_unit": "week",
+  "repetitions_per_regime": 1,
+  "target_continuous_mean": 20,
+  "master_seed": 42,
+  "rng": "numpy.random.default_rng (PCG64)",
+  "numpy_version": "1.26.4",
+  "seed_convention": "SeedSequence([master_seed, regime_index, replicate_index]); zero-based indices",
+  "regime_order": [
+    "smooth",
+    "erratic",
+    "intermittent",
+    "lumpy"
+  ],
+  "draw_order": [
+    "binomial(1, p, size=277)",
+    "gamma(shape=k, scale=theta, size=277)"
+  ],
+  "integerization": "occurrences * ceil(gamma_sizes); no clipping or resampling",
+  "mean_note": "20 is the continuous population mean before ceiling; realized integer means are not forced to 20.",
+  "regime_thresholds": {
+    "adi": 1.32,
+    "positive_cv2": 0.49,
+    "boundary": "low side uses <="
+  },
+  "regimes": [
+    {
+      "regime": "smooth",
+      "seed": [
+        42,
+        0,
+        0
+      ],
+      "p": 1.0,
+      "k": 25,
+      "theta": 0.8,
+      "target_continuous_mean": 20,
+      "num_periods": 277,
+      "replicate_index": 0,
+      "integerization": "ceil_positive_gamma"
+    },
+    {
+      "regime": "erratic",
+      "seed": [
+        42,
+        1,
+        0
+      ],
+      "p": 0.95,
+      "k": 1,
+      "theta": 21.05263157894737,
+      "target_continuous_mean": 20,
+      "num_periods": 277,
+      "replicate_index": 0,
+      "integerization": "ceil_positive_gamma"
+    },
+    {
+      "regime": "intermittent",
+      "seed": [
+        42,
+        2,
+        0
+      ],
+      "p": 0.4,
+      "k": 5,
+      "theta": 10,
+      "target_continuous_mean": 20,
+      "num_periods": 277,
+      "replicate_index": 0,
+      "integerization": "ceil_positive_gamma"
+    },
+    {
+      "regime": "lumpy",
+      "seed": [
+        42,
+        3,
+        0
+      ],
+      "p": 0.4,
+      "k": 1,
+      "theta": 50,
+      "target_continuous_mean": 20,
+      "num_periods": 277,
+      "replicate_index": 0,
+      "integerization": "ceil_positive_gamma"
+    }
+  ]
+}

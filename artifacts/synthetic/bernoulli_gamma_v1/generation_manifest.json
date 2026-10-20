@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "dataset_id": "bernoulli_gamma_v1",
+  "generator_version": 1,
+  "numpy_version": "1.26.4",
+  "generation_convention": "numpy default_rng(SeedSequence([42, regime_index, 0])); binomial occurrences then Gamma sizes; occurrence * ceil(size)",
+  "record_count": 4,
+  "periods_per_record": 277,
+  "files_sha256": {
+    "generation_config.json": "f02fffd7316b0e67ccd73702c1564f8e70abc14bcc5e7e54ef3cee5a8914f77a",
+    "demand_series.json": "6b95fd5f22bc946f1862650481cfbf997e5f3e4a9f5790c805eaa0aaf3936503",
+    "environment_calibration.json": "b3ee99331c9c05860d59389f81887b47ae33317d7e41a99b2c0c312ca84ba8d2"
+  },
+  "dataset_revision": 2,
+  "revision_note": "2026-10-11: smooth replaced with p=1.0, k=25, theta=0.8; other demand records unchanged"
+}

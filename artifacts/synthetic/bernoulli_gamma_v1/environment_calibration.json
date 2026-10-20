@@ -1,0 +1,85 @@
+{
+  "schema_version": 2,
+  "dataset_id": "bernoulli_gamma_v1",
+  "q": 0.95,
+  "lead_times": [
+    2,
+    2,
+    2,
+    2
+  ],
+  "num_periods": 277,
+  "inventory_formula": "max(1, ceil(quantile(D[:130][:-1] + D[:130][1:], 0.95, method='linear')))",
+  "capacity_formula": "max(1, ceil(quantile(D[:130], 0.95, method='linear'))); equal at all four stages",
+  "calibration_window": "weeks_1_to_130",
+  "policy_calibration": {
+    "training_weeks": 26,
+    "service_level": 0.95,
+    "standard_deviation_ddof": 1
+  },
+  "records": [
+    {
+      "series_id": "smooth_001",
+      "init_inventories": [
+        50,
+        50,
+        50,
+        50
+      ],
+      "prod_capacities": [
+        27,
+        27,
+        27,
+        27
+      ]
+    },
+    {
+      "series_id": "erratic_001",
+      "init_inventories": [
+        96,
+        96,
+        96,
+        96
+      ],
+      "prod_capacities": [
+        60,
+        60,
+        60,
+        60
+      ]
+    },
+    {
+      "series_id": "intermittent_001",
+      "init_inventories": [
+        115,
+        115,
+        115,
+        115
+      ],
+      "prod_capacities": [
+        86,
+        86,
+        86,
+        86
+      ]
+    },
+    {
+      "series_id": "lumpy_001",
+      "init_inventories": [
+        173,
+        173,
+        173,
+        173
+      ],
+      "prod_capacities": [
+        111,
+        111,
+        111,
+        111
+      ]
+    }
+  ],
+  "capacity_quantile": 0.95,
+  "environment_calibration_weeks": 130,
+  "capacity_scope": "new_order_quantity_only"
+}
