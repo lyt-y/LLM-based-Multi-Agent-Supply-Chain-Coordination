@@ -209,7 +209,7 @@ def main(argv=None):
     selection = parser.add_mutually_exclusive_group()
     selection.add_argument('--record-id')
     selection.add_argument('--all', action='store_true', dest='all_records')
-    parser.add_argument('--periods', type=int, help='Submission protocol: specify 130. Generic legacy default: M5 277; synthetic 130')
+    parser.add_argument('--periods', type=int, help='Evaluation periods (default: 130 for both datasets); explicit overrides support general simulation')
     parser.add_argument('--output-root', type=Path, help='Dataset result root, before method directory')
     parser.add_argument('--preflight', action='store_true', help='No decisions or result writes')
     parser.add_argument('--resume', type=Path, help='Resume a saved *.checkpoint.json with its original dataset/model/settings')
@@ -252,7 +252,7 @@ def main(argv=None):
                           preflight=args.preflight, resume_path=path, resume_checkpoint=checkpoint)
     args.dataset = args.dataset or 'm5'
     args.method = args.method or 'ss'
-    periods = args.periods if args.periods is not None else (277 if args.dataset == 'm5' else 130)
+    periods = args.periods if args.periods is not None else 130
     root = args.output_root or (M5_RESULTS if args.dataset == 'm5' else SYNTHETIC_RESULTS)
     for record in select_records(args.dataset, args.record_id, args.all_records):
         status = run_record(record, dataset=args.dataset, method=args.method,

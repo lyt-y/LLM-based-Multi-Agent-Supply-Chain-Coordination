@@ -502,7 +502,7 @@ class GeminiDecisionProvider:
                               decision_summary=action.decision_summary)
 
 
-def preflight(*, record_id=REPRESENTATIVE_ID, num_periods=277, output_root=None):
+def preflight(*, record_id=REPRESENTATIVE_ID, num_periods=130, output_root=None):
     """Validate local prerequisites and destination without any API requests."""
     from evaluation.metrics import CoordinationMetrics
     from simulation.config import make_m5_config
@@ -524,7 +524,9 @@ def preflight(*, record_id=REPRESENTATIVE_ID, num_periods=277, output_root=None)
             raise ValueError('The no-communication template requires two-period lead times')
         if type(num_periods) is not int or not 1 <= num_periods <= 277:
             raise ValueError('num_periods must be an integer from 1 to 277')
+        from demand.demand_data import demand_fn_from_sequence
         config['num_periods'] = num_periods
+        config['demand_fn'] = demand_fn_from_sequence(record['weekly_demand'][:num_periods])
         config['_provenance']['demand_window'] = f'weeks_1_to_{num_periods}'
         config['_provenance'].update(evaluation_window={'first_week': 1, 'last_week': num_periods})
         root = Path(output_root) if output_root is not None else M5_RESULTS
@@ -551,8 +553,8 @@ def main(argv=None):
     parser.add_argument('--preflight', action='store_true', help='Check locally without generating decisions')
     parser.add_argument('--record-id', default=REPRESENTATIVE_ID,
                         help='Representative M5 record ID')
-    parser.add_argument('--periods', type=int, default=277,
-                        help='Number of weekly periods from the record prefix (default: 277)')
+    parser.add_argument('--periods', type=int, default=130,
+                        help='Number of weekly periods from the record prefix (default: 130)')
     parser.add_argument('--resume', type=Path, help='Resume a saved checkpoint via the shared runner')
     args = parser.parse_args(argv)
     if args.resume is not None:

@@ -15,7 +15,7 @@
 | Gemini | gemini-3.8-flash; temperature 0; low thinking |
 | Current prompt versions | no communication v7; adjacent v10; no forecast v6; controlled adjacent v1 |
 
-The source in `src/` is unchanged. Runtime calibration is computed from frozen
+Runtime calibration is computed from frozen
 demand. The obsolete rho-based calibration sweep is excluded from active artifacts,
 with only its archive location/hash retained. It is not an alternative default.
 Exact current provider options and per-run configurations are in the
@@ -47,15 +47,15 @@ remote backup has not been verified.
 ## Publication layout
 
 Two files, `results/summary.json` and `results/manifest.json`, replace overlapping
-summary, batch and per-item projection files. The four retained PDFs are in
+summary, batch and per-item projection files. The four final evaluation PDFs are in
 `results/figures/`. All four README plotting commands are offline;
 PNG/table exports are disposable. New experiments use a separate output root and
 retain the simulator's normal per-method result/checkpoint schema. Historical paths
 are provenance, not local paths to rewrite or pass to an execution supervisor.
 
-The M5 demand figure retains `FOODS_1_188_WI_1_evaluation` as its intermittent
-series; the updated comparison uses `FOODS_2_368_TX_2_evaluation`. Preserving this
-distinction leaves the existing plotted data unchanged.
+The M5 demand figure and the evaluated comparison both use
+`FOODS_2_368_TX_2_evaluation` as the intermittent series. The demand figure
+shows its frozen weeks 1-130; the retained figure data are unchanged. Both final demand figures show weeks 1-130. The synthetic figure mean, zero-week count and axis limits use only that window. Frozen 277-week inputs are unchanged; the previous full-source synthetic illustration is excluded from the public submission. Its evidence is preserved outside the public tree, with its checksum recorded as excluded external evidence in the manifest. Descriptive README findings compare individual retained runs and do not isolate a causal communication effect.
 
 ## Scientific definitions
 
@@ -196,7 +196,7 @@ M5 加载器为记录附加 `dataset_source='m5'`、冻结 JSON 的绝对路径�
 | 当前主要评估 | 第 1～130 周 | — |
 | LLM 在线移动平均 | 决策前最多 26 个已完成周 | 只用截至 t−1 的本级下游需求 |
 
-The generic runner calibrates from the full source record before selecting an evaluation prefix. Only 130-period evaluation is approved here; always pass --periods 130. Frozen inputs retain 277 source weeks.
+The shared runner and standalone LLM experiment entry points default to 130 evaluation periods. Environment calibration uses only the first 130 source weeks before the requested evaluation prefix is selected; it does not use all 277 source weeks. Explicit horizon overrides remain available within source-length bounds for general-purpose simulations, while calibration remains fixed to the first 130 source weeks even for shorter evaluations. Such shorter runs are not temporally held-out benchmarks. Only weeks 1-130 are approved for the retained study. Frozen inputs retain 277 source weeks; source_num_periods records source length, whereas run-level num_periods records the evaluation horizon.
 
 ### 4.2 线性分位数的精确定义
 

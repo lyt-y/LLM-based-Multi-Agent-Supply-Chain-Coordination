@@ -124,3 +124,40 @@ class PublicationTests(unittest.TestCase):
         for figure in manifest['figures'].values():
             self.assertEqual(hashlib.sha256((ROOT / figure['local_path']).read_bytes()).hexdigest(),
                              figure['regenerated_sha256'])
+
+
+    def test_synthetic_demand_plot_uses_evaluation_window_only(self):
+        import tempfile
+        from unittest.mock import patch
+        from scripts import plot_four_demand_series as plot
+        records = load_series()
+        with tempfile.TemporaryDirectory() as directory, patch.object(plot, 'OUTPUT', Path(directory)), \
+                patch.object(plot.plt, 'close'):
+            try:
+                plot.main('synthetic')
+                figure = plot.plt.gcf()
+                self.assertIn('weeks 1-130', figure._suptitle.get_text())
+                for axis, record in zip(figure.axes, records):
+                    values = record['weekly_demand'][:130]
+                    self.assertEqual([bar.get_height() for bar in axis.patches], values)
+                    self.assertEqual(axis.get_xlim(), (0.5, 130.5))
+                    self.assertAlmostEqual(axis.lines[0].get_ydata()[0], sum(values) / 130)
+                    self.assertIn(f"Zero weeks: {values.count(0)}/130", axis.texts[0].get_text())
+                self.assertTrue((Path(directory) / 'synthetic_demand_130.pdf').is_file())
+            finally:
+                figure = plot.plt.gcf()
+        plot.plt.close(figure)
+
+    def test_only_final_130_period_figures_are_published(self):
+        _, manifest = load_results()
+        expected = {'m5_130_comparison.pdf', 'synthetic_130_comparison.pdf',
+                    'm5_demand_130.pdf', 'synthetic_demand_130.pdf'}
+        self.assertEqual(set(manifest['figures']), expected)
+        self.assertEqual({p.name for p in (ROOT / 'results/figures').rglob('*.pdf')}, expected)
+        for name in ('m5_demand_130.pdf', 'synthetic_demand_130.pdf'):
+            self.assertEqual(manifest['figures'][name]['evaluation_periods'], 130)
+        self.assertNotIn('source_figures', manifest)
+        evidence = manifest['excluded_source_illustration']
+        self.assertEqual(evidence['source_num_periods'], 277)
+        self.assertEqual(evidence['location_type'], 'external_evidence_not_bundled')
+        self.assertNotIn('local_path', evidence)

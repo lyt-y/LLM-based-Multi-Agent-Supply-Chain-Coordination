@@ -78,7 +78,7 @@ class GeminiNoForecastProvider(GeminiDecisionProvider):
             'total_cost_so_far', 'prod_capacity')})
 
 
-def preflight(*, record_id=REPRESENTATIVE_ID, num_periods=277, output_root=None):
+def preflight(*, record_id=REPRESENTATIVE_ID, num_periods=130, output_root=None):
     """Validate the record and choose a fresh result path without an API request."""
     provider = GeminiNoForecastProvider(CoordinationMetrics())
     try:
@@ -90,7 +90,9 @@ def preflight(*, record_id=REPRESENTATIVE_ID, num_periods=277, output_root=None)
             raise ValueError('Expected two-period lead times')
         if type(num_periods) is not int or not 1 <= num_periods <= 277:
             raise ValueError('num_periods must be an integer from 1 to 277')
+        from demand.demand_data import demand_fn_from_sequence
         config['num_periods'] = num_periods
+        config['demand_fn'] = demand_fn_from_sequence(record['weekly_demand'][:num_periods])
         config['_provenance']['demand_window'] = f'weeks_1_to_{num_periods}'
         config['_provenance'].update(evaluation_window={'first_week': 1, 'last_week': num_periods})
         root = Path(output_root) if output_root is not None else M5_RESULTS
@@ -114,7 +116,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--preflight', action='store_true')
     parser.add_argument('--record-id', default=REPRESENTATIVE_ID)
-    parser.add_argument('--periods', type=int, default=277)
+    parser.add_argument('--periods', type=int, default=130)
     parser.add_argument('--resume', type=Path, help='Resume a saved checkpoint via the shared runner')
     args = parser.parse_args(argv)
     if args.resume is not None:

@@ -40,15 +40,15 @@ def main(dataset='m5'):
                            for _, regime, _, _ in RECORDS}
         records = tuple((label, regime, f'{regime}_001', color)
                         for label, regime, _, color in RECORDS)
-        output = ROOT / 'results/figures'
-        shared_max = max(max(row['weekly_demand']) for row in rows)
+        output = OUTPUT
+        shared_max = max(max(row['weekly_demand'][:130]) for row in rows)
     else:
         representatives = json.loads(SOURCE.read_text(encoding='utf-8'))
         records = RECORDS
         output = OUTPUT
     fig, axes = plt.subplots(4, 1, figsize=(13, 10), sharex=True,
                              constrained_layout=True)
-    title = ('Bernoulli-Gamma weekly demand by regime' if synthetic
+    title = ('Bernoulli-Gamma evaluation demand: weeks 1-130' if synthetic
              else 'M5 evaluation demand: weeks 1-130')
     fig.suptitle(title, fontsize=16, weight='bold')
 
@@ -59,8 +59,7 @@ def main(dataset='m5'):
         values = matches[0]['weekly_demand']
         if len(values) != 277:
             raise ValueError(f'Expected 277 weekly observations for {record_id}')
-        if not synthetic:
-            values = values[:130]
+        values = values[:130]
         periods = len(values)
         weeks = range(1, periods + 1)
         ax.bar(weeks, values, width=0.85, color=color, linewidth=0)
@@ -78,16 +77,14 @@ def main(dataset='m5'):
         ax.legend(loc='upper right', frameon=False, fontsize=9)
         annotation = f'{sum(value > 0 for value in values)}/{periods} nonzero weeks'
         if synthetic:
-            stats = matches[0]['statistics']
-            annotation = (f"Zero weeks: {stats['zero_weeks']}/277  |  "
-                          f"ADI: {stats['adi']:.2f}  |  Positive CV squared: {stats['positive_cv2']:.2f}")
+            annotation = f'Zero weeks: {sum(value == 0 for value in values)}/{periods} (evaluation window)'
         ax.text(0.01, 0.88, annotation,
                 transform=ax.transAxes, fontsize=9, color='#444444', va='top')
 
     axes[-1].set_xlabel('Week')
-    axes[-1].set_xticks([1, 52, 104, 156, 208, 260, 277] if synthetic else [1, 26, 52, 78, 104, 130])
+    axes[-1].set_xticks([1, 26, 52, 78, 104, 130])
     output.mkdir(parents=True, exist_ok=True)
-    stem = 'synthetic_demand_277' if synthetic else 'm5_demand_130'
+    stem = 'synthetic_demand_130' if synthetic else 'm5_demand_130'
     png = output / f'{stem}.png'
     pdf = output / f'{stem}.pdf'
     fig.savefig(png, dpi=200, facecolor='white')

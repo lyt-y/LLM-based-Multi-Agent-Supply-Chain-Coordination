@@ -84,6 +84,78 @@ class ExecutionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             runner.select_records('unknown')
 
+    def test_cli_defaults_use_130_periods_for_both_datasets(self):
+        for dataset in ('m5', 'synthetic'):
+            with self.subTest(dataset=dataset), tempfile.TemporaryDirectory() as directory, \
+                    patch.object(runner, 'run_record', return_value=0) as run:
+                self.assertEqual(runner.main(['--dataset', dataset, '--preflight',
+                                              '--output-root', directory]), 0)
+                self.assertEqual(run.call_args.kwargs['periods'], 130)
+        with patch.object(runner, 'run_record', return_value=0) as run:
+            self.assertEqual(runner.main(['--preflight']), 0)
+            self.assertEqual(run.call_args.kwargs['dataset'], 'm5')
+            self.assertEqual(run.call_args.kwargs['periods'], 130)
+
+    def test_cli_preserves_explicit_horizon_overrides(self):
+        for dataset in ('m5', 'synthetic'):
+            for periods in (104, 130, 277):
+                with self.subTest(dataset=dataset, periods=periods), \
+                        patch.object(runner, 'run_record', return_value=0) as run:
+                    self.assertEqual(runner.main(['--dataset', dataset, '--periods', str(periods),
+                                                  '--preflight']), 0)
+                    self.assertEqual(run.call_args.kwargs['periods'], periods)
+
+    def test_final_protocol_demand_stops_at_week_130(self):
+        for dataset, record in [('m5', get_representative()), ('synthetic', load_series()[0])]:
+            with self.subTest(dataset=dataset):
+                original = list(record['weekly_demand'])
+                prefix, config = runner.prepare_config(record, dataset, 130)
+                self.assertEqual(config['num_periods'], 130)
+                self.assertEqual(config['_provenance']['source_num_periods'], 277)
+                self.assertEqual(prefix['weekly_demand'], original[:130])
+                self.assertEqual(record['weekly_demand'], original)
+                with self.assertRaises(IndexError):
+                    config['demand_fn'](131)
+
+    def test_standalone_llm_defaults_and_explicit_horizon_boundaries(self):
+        modules = [importlib.import_module('agents.' + name) for name in (
+            'gemini_provider', 'gemini_no_forecast', 'gemini_local_communication')]
+        for module in modules:
+            for horizon in (None, 104, 277):
+                with self.subTest(module=module.__name__, horizon=horizon), \
+                        tempfile.TemporaryDirectory() as directory, \
+                        patch.dict('os.environ', {'GEMINI_API_KEY': 'offline-test'}), \
+                        patch('agents.gemini_provider.load_dotenv'), \
+                        patch('agents.gemini_provider.genai.Client') as client:
+                    kwargs = {'output_root': directory}
+                    if horizon is not None:
+                        kwargs['num_periods'] = horizon
+                    provider, config, destination = module.preflight(**kwargs)
+                    try:
+                        expected = 130 if horizon is None else horizon
+                        self.assertEqual(config['num_periods'], expected)
+                        self.assertEqual(config['_provenance']['source_num_periods'], 277)
+                        self.assertEqual(config['_provenance']['evaluation_window'],
+                                         {'first_week': 1, 'last_week': expected})
+                        with self.assertRaises(IndexError):
+                            config['demand_fn'](expected + 1)
+                        client.return_value.models.generate_content.assert_not_called()
+                    finally:
+                        provider.close()
+            for horizon in (None, 104, 277):
+                with self.subTest(cli=module.__name__, horizon=horizon), \
+                        patch.object(module, 'preflight') as preflight:
+                    preflight.return_value = (SimpleNamespace(close=lambda: None),
+                                              {'num_periods': 130 if horizon is None else horizon},
+                                              Path(module.REPRESENTATIVE_ID + '_run_001.json'))
+                    argv = ['--preflight']
+                    if horizon is not None:
+                        argv += ['--periods', str(horizon)]
+                    with redirect_stdout(io.StringIO()):
+                        self.assertEqual(module.main(argv), 0)
+                    self.assertEqual(preflight.call_args.kwargs['num_periods'],
+                                     130 if horizon is None else horizon)
+
     def test_preflight_creates_no_results(self):
         with tempfile.TemporaryDirectory() as directory, redirect_stdout(io.StringIO()):
             self.assertEqual(runner.main(['--dataset', 'synthetic', '--all', '--preflight',

@@ -332,8 +332,8 @@ class LocalCommunicationTests(unittest.TestCase):
             try:
                 self.assertEqual(path.parent.name, EXPERIMENT_ID)
                 self.assertEqual(path.name, REPRESENTATIVE_ID + '_run_001.json')
-                self.assertEqual(config['num_periods'], 104)
-                self.assertEqual(config['_provenance']['demand_window'], 'weeks_1_to_104')
+                self.assertEqual(config['num_periods'], 130)
+                self.assertEqual(config['_provenance']['demand_window'], 'weeks_1_to_130')
                 self.assertEqual(config['_provenance']['calibration_window'], 'weeks_1_to_130')
                 self.client_factory.return_value.models.generate_content.assert_not_called()
             finally:

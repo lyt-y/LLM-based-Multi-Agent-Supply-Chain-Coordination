@@ -23,7 +23,7 @@ from agents.gemini_provider import (
 
 
 EXPERIMENT_ID = 'gemini_local_communication'
-NUM_PERIODS = 104  # Default: first two years of weekly demand.
+NUM_PERIODS = 130  # Approved evaluation horizon.
 PROMPT_VERSION = 'gemini_local_communication_v10'
 SCHEMA_VERSION = 'adjacent_opening_state_then_order_insight_v3'
 SYSTEM_PROMPT = 'Make one replenishment decision and generate one local planning insight for your immediate upstream neighbor using only the supplied local and adjacent information.'
@@ -312,7 +312,9 @@ def preflight(*, record_id=REPRESENTATIVE_ID, num_periods=NUM_PERIODS, output_ro
             raise ValueError('num_periods must be an integer from 1 to 277')
         # Keep matched full-record inventory/capacity calibration and execute
         # the selected prefix of weekly demand observations.
+        from demand.demand_data import demand_fn_from_sequence
         config['num_periods'] = num_periods
+        config['demand_fn'] = demand_fn_from_sequence(record['weekly_demand'][:num_periods])
         config['_provenance']['demand_window'] = f'weeks_1_to_{num_periods}'
         config['_provenance'].update(evaluation_window={'first_week': 1, 'last_week': num_periods})
         root = Path(output_root) if output_root is not None else M5_RESULTS
@@ -342,7 +344,7 @@ def main(argv=None):
     parser.add_argument('--record-id', default=REPRESENTATIVE_ID,
                         help='Representative M5 record ID')
     parser.add_argument('--periods', type=int, default=NUM_PERIODS,
-                        help='Number of weekly periods from the record prefix (default: 104)')
+                        help='Number of weekly periods from the record prefix (default: 130)')
     parser.add_argument('--resume', type=Path, help='Resume a saved checkpoint via the shared runner')
     args = parser.parse_args(argv)
     if args.resume is not None:

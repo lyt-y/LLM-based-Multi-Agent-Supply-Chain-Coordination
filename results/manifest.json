@@ -5298,12 +5298,21 @@
       "wrapt==2.5.1"
     ]
   },
+  "approved_protocol_corrections": {
+    "description": "Approved evaluation-default and observation-boundary corrections only; frozen inputs, KPI definitions and historical experiment records are unchanged. The following hashes preserve the pre-correction source provenance; scientific_source_sha256 identifies current files.",
+    "previous_scientific_source_sha256": {
+      "src/agents/gemini_provider.py": "58ed575707d1d933ae9a61b8cf38bc3574984125bf6b6c2548b73c79c8d9771b",
+      "src/agents/gemini_no_forecast.py": "6937574eb526827b7b5e89e37821410fee622bf206c2b8c982a64232082638a8",
+      "src/agents/gemini_local_communication.py": "7773282534b5abb1f3230a9bca6d6eaed5091bdbdf3cf95682c7379aac6cf713"
+    },
+    "evaluation_periods": 130
+  },
   "scientific_source_sha256": {
     "src/project_paths.py": "cafc1c0dce8264e41888f40e8df5827fd72d3aef31e518597083c3ea4c698be4",
     "src/agents/gemini_controlled_adjacent.py": "1322cdfc4ba65f1097c4ff25ed3aa8f4621d0ff7d90bd7f0f73111f5a5545005",
-    "src/agents/gemini_local_communication.py": "7773282534b5abb1f3230a9bca6d6eaed5091bdbdf3cf95682c7379aac6cf713",
-    "src/agents/gemini_no_forecast.py": "6937574eb526827b7b5e89e37821410fee622bf206c2b8c982a64232082638a8",
-    "src/agents/gemini_provider.py": "58ed575707d1d933ae9a61b8cf38bc3574984125bf6b6c2548b73c79c8d9771b",
+    "src/agents/gemini_local_communication.py": "3cc4cbb50cbd690c10cd9c819ef35f9c4917ccc8aa99fc43de3300025ad9cc49",
+    "src/agents/gemini_no_forecast.py": "4e2cbf26833cdd2877ff6cea369e28c6972f8c305728624c2daa32911a465ea1",
+    "src/agents/gemini_provider.py": "d2c9aa9772e96f830a197581a40688c1f84af95bf1df490ed950500a100cb0dd",
     "src/agents/__init__.py": "a09d9520f2caf47d9693db18c2e3009583edfdbf1209e8b4f84da54fe104c833",
     "src/demand/demand_data.py": "8c44b0bd1729867ea42eca4c8522d0187469c7e26325e1567b64625b1b47c05a",
     "src/demand/forecast.py": "6ee5ca68594d103fa38d3a1d5f5d128b0429f473a826cf738fbd099cff25a65b",
@@ -5354,18 +5363,18 @@
     "latest_offline_validation": {
       "date": "2026-10-21",
       "tests": {
-        "passed": 123,
+        "passed": 129,
         "skipped": 1,
         "warnings": 14,
-        "seconds": 206.96,
+        "seconds": 134.98,
         "skip_reason": "External raw M5 CSV not supplied"
       },
       "retained_values": "Exact canonical type-sensitive JSON equality with initial submission for all 32 retained rows and their complete experiment records; all current run IDs retained. Frozen comparison signatures unchanged.",
       "protocol": "All 32 pass current calibration, costs, lead times, input hashes, evaluation windows and policy/prompt checks; all 24 LLM runs additionally match static current provider metadata with mocked SDK client.",
-      "offline_commands": "pip check, prepare_m5 --help, synthetic preflight, M5 130-period preflight, four synthetic 130-period baseline checks, four README figure commands and all M5 comparison aliases passed.",
-      "baseline_reproduction": "All four generated synthetic baseline costs and global bullwhip values exactly match retained results; generated checks remain ignored and are not reported experiments.",
-      "references": "All local documentation links, retained input paths, run IDs, public figure hashes and current scientific-source/input/public-metadata checksums verified. Archive paths remain explicitly external.",
-      "scope": "Scientific source and frozen inputs are unchanged. Runner differences are help/report strings only. Retained comparison PDFs and synthetic source-demand PDF are byte-identical to the original evidence. No live LLM calls were used for validation."
+      "offline_commands": "pip check, prepare_m5 --help, runner --help, both documented 130-period preflights, four synthetic and one intermittent M5 baseline checks, and all four final README figure commands passed. Shared/standalone 130-period defaults and explicit overrides pass offline regressions.",
+      "baseline_reproduction": "All four generated synthetic baselines and the documented intermittent M5 baseline reproduce retained operational costs and global bullwhip exactly. Outputs were generated only in a temporary verification copy and are not reported experiments.",
+      "references": "All README and methodology links resolve. Exactly four official 130-period figures are bundled and their hashes match. The obsolete source-length illustration is excluded from the public tree, with original evidence preserved privately and its checksum retained as external evidence. Descriptive findings match the 32 retained rows; comparison signatures and experiment configurations are unchanged.",
+      "scope": "Final public tree contains only the four official 130-period figures. The obsolete source-length synthetic illustration is excluded and preserved as external evidence. Frozen inputs, KPI calculations, summary values and all 32 complete experiment records remain unchanged. Shared and standalone defaults are 130; explicit overrides remain supported. No live LLM calls are used."
     }
   },
   "figures": {
@@ -5395,19 +5404,6 @@
         "lumpy_001"
       ]
     },
-    "synthetic_demand_277.pdf": {
-      "source_path": "results/synthetic/bernoulli_gamma_v1/comparisons/four_demand_series_277.pdf",
-      "original_sha256": "e06c0ec0a3894bc5214154702f6b0490b50a1e770d4b661fc236dea50e422aeb",
-      "source_location_type": "historical_provenance",
-      "local_path": "results/figures/synthetic_demand_277.pdf",
-      "regenerated_sha256": "e1fe9893dfa2c51e480639b2d4b256b1d2953fb011af11dacde9389b7c4bafff",
-      "record_ids": [
-        "smooth_001",
-        "erratic_001",
-        "intermittent_001",
-        "lumpy_001"
-      ]
-    },
     "m5_demand_130.pdf": {
       "local_path": "results/figures/m5_demand_130.pdf",
       "regenerated_sha256": "43c925be3f19a9f7c507882120c90ce1217d27725ef912e7111eae1e0a940c93",
@@ -5419,6 +5415,19 @@
       ],
       "evaluation_periods": 130,
       "role": "Frozen input prefix, not experimental output"
+    },
+    "synthetic_demand_130.pdf": {
+      "local_path": "results/figures/synthetic_demand_130.pdf",
+      "regenerated_sha256": "44d8cff2592a55d1c4e6c420298b9b5941d253f6a79eb4e08173f247cf9ea2e8",
+      "record_ids": [
+        "smooth_001",
+        "erratic_001",
+        "intermittent_001",
+        "lumpy_001"
+      ],
+      "evaluation_periods": 130,
+      "source_num_periods": 277,
+      "role": "Frozen input prefix, not experimental output; mean and zero-week annotations use weeks 1-130"
     }
   },
   "comparison_signatures": {
@@ -5447,5 +5456,11 @@
       "controlled_adjacent"
     ],
     "source_series_periods": 277
+  },
+  "excluded_source_illustration": {
+    "sha256": "e1fe9893dfa2c51e480639b2d4b256b1d2953fb011af11dacde9389b7c4bafff",
+    "source_num_periods": 277,
+    "location_type": "external_evidence_not_bundled",
+    "role": "Historical source-length illustration excluded from the final public submission tree; original evidence preserved outside that tree."
   }
 }

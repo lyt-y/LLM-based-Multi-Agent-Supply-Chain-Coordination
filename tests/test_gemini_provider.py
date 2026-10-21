@@ -424,7 +424,7 @@ class GeminiTests(GeminiFixture):
         with tempfile.TemporaryDirectory() as directory:
             provider, config, destination = gp.preflight(output_root=directory)
             self.assertEqual(config['_provenance']['representative_record_id'], gp.REPRESENTATIVE_ID)
-            self.assertEqual(config['num_periods'], 277)
+            self.assertEqual(config['num_periods'], 130)
             self.assertEqual(destination, Path(directory) / gp.EXPERIMENT_ID / (gp.REPRESENTATIVE_ID + '_run_001.json'))
             self.assertEqual(destination.relative_to(directory).as_posix(),
                              'gemini_no_communication/FOODS_1_002_WI_1_evaluation_run_001.json')
@@ -457,7 +457,7 @@ class GeminiTests(GeminiFixture):
             summary.write_text(json.dumps([{'record_id': record_id, 'run_id': 'run_001'}]))
             provider, config, destination = gp.preflight(record_id=record_id, output_root=directory)
             try:
-                self.assertEqual(config['num_periods'], 277)
+                self.assertEqual(config['num_periods'], 130)
                 self.assertEqual(destination.name, record_id + '_run_002.json')
                 self.assertEqual(len(json.loads(summary.read_text())), 1)
             finally:
